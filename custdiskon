@@ -1,0 +1,145 @@
+#include <iostream>
+
+using namespace std;
+
+class Person{
+	public :
+		string name, address, telpnum;
+		Person (string name, string address, string telpnum){
+			Person :: name = name;
+			Person :: address = address;
+			Person :: telpnum = telpnum;
+		}
+		
+		Person (){
+			name = " ";
+			address = " ";
+			telpnum = "0";
+		}
+};
+
+class Customer{
+	public :
+		Person person;
+		int custNumber;
+		bool mail;
+		
+		Customer (){
+			custNumber = 0;
+			mail = false;
+		}
+		
+		Customer (string name, string address, string telpnumber, int custNumber, bool mail){
+			person.name = name;
+			person.address = address;
+			Customer :: custNumber = custNumber;
+			Customer :: mail = mail;
+		}
+		
+		void input_data(int custNumber){
+			string y, nama, alamat, nom;
+			cout << "Nama    : "; cin >> ws; getline(cin, nama);
+			cout << "Alamat  : "; cin >> ws; getline(cin,alamat);
+			cout << "Telepon : "; cin >> nom;
+			cout << "Waiting list mail (true/false) : "; cin >> y;
+			if((y == "True") || (y == "true")) mail = true;
+            else if((y == "False") || (y == "false")) mail = false;
+            
+            person.name = nama;
+            person.address = alamat;
+            person.telpnum = nom;
+            Customer::custNumber = custNumber;	
+		}
+		
+		void cetak_data(){
+			string isMail = (mail)? "True" : "False";
+            cout << "Nama      : " << person.name << endl
+                 << "Alamat    : " << person.address << endl
+                 << "Telepon         : " << person.telpnum << endl
+                 << "Customer Number : " << custNumber << endl
+                 << "Waiting list Mail ?  : " << isMail << endl;
+		}
+};
+
+class PrefferedCustomer{
+	public :
+		int belanja, dibayar, diskon;
+		string dapatdisc;
+		Customer customer;
+		
+		PrefferedCustomer (){
+			belanja = 0;
+			diskon = 0;
+			dapatdisc = " kamu mendapat diskon sebesar 0 ";	
+		}
+		
+		void Belanja(){
+			cout << "Masukkan semua jumlah harga belanja kamu : "; cin >> belanja;
+		}
+		
+		void Diskon(){
+			if (belanja >= 200000){
+				diskon = 10;
+				dapatdisc = " kamu mendapat diskon sebesar 10% ";
+			}
+			else if (belanja >= 150000){
+				diskon = 7;
+				dapatdisc = " kamu mendapat diskon sebesar 7% ";
+			}
+			else if (belanja >= 100000){
+				diskon = 6;
+				dapatdisc = " kamu mendapat diskon sebesar 6% ";
+			}
+			else if (belanja >= 50000){
+				diskon = 5;
+				dapatdisc = " kamu mendapat diskon sebesar 5% ";
+			}
+			else {
+				diskon = 0;
+				dapatdisc = " Maaf kamu tidak dapat diskon, tambah belanjamu agar mendapat diskon ";
+			}
+			dibayar = belanja - (belanja * diskon / 100);
+		}
+		void pembayaran(){
+			Diskon ();
+			customer.cetak_data();
+			cout << " Total belanja : " << belanja << endl;
+			cout << " Total belanja yang harus dibayar : " << dibayar << " ( " << dapatdisc << " )" <<endl;
+		}
+};
+int main(){
+    int n, x;
+    bool isLoop = true, check = false;
+    PrefferedCustomer prefCustomer[50];
+    cout << "-- List Customer--\n\n";
+    cout << "Masukkan Jumlah customer : "; cin >> n;
+    while(isLoop){
+        cout << "-- Menu Pilihan --\n\n";
+        cout << "1. Masukkan Data Customer\n"
+             << "2. Tampilkan Data Customer\n"
+             << "3. Exit\n";
+        cout << "Menu : "; cin >> x;
+        switch(x){
+        	case 1:
+                cout << endl;
+                for(int i = 1; i <= n; i++){
+                    cout << "Customer "<< i << endl;
+                    prefCustomer[i-1].customer.input_data(i);
+                    prefCustomer[i-1].Belanja();
+                    cout << endl;
+                }break;
+            case 2:
+                cout << endl;
+                for(int i = 1; i <= n; i++){
+                    cout << "Customer " << i << endl;
+                    prefCustomer[i-1].pembayaran();
+                    cout << endl;
+                }
+                system("pause"); break;
+            case 3:
+                isLoop = false; break;
+            default:
+                cout << "Masukkan pilihan menu 1 sampai 3 dengan tepat \n"; break;	
+       }
+   } return 0;
+}
